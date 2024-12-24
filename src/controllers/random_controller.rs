@@ -42,7 +42,7 @@ impl RandomGenerator for RandomController {
 }
 
 #[cfg(test)]
-mod controller_should {
+mod random_controller_should {
     use super::*;
     use rstest::rstest;
 
