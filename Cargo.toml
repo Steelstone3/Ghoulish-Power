@@ -1,19 +1,22 @@
 [package]
-name = "example"
+name = "ghoulish-power"
 version = "0.1.0"
 authors = ["Skippy <steelstone3@gmail.com>"]
 edition = "2021"
-homepage = "https://github.com/Steelstone3/Rust-Project-Template"
-repository = "https://github.com/Steelstone3/Rust-Project-Template"
+homepage = "https://github.com/Steelstone3/Ghoulish-Power"
+repository = "https://github.com/Steelstone3/Ghoulish-Power"
 license = "GPLv3"
 readme = "README.md"
-include = [
-
-]
+include = []
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dev-dependencies]
 
 [dependencies]
-inquire = "0.6"
+# serde = { features = ["derive"], version = "1" }
+inquire = "0.7"
+rand = "0"
+rand_derive2 = "0"
+rstest = "0"
+mockall = "0"
