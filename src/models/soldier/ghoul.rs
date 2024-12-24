@@ -1,5 +1,17 @@
+use super::{
+    constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
+    ghoul_types::GhoulType,
+    weapon::GhoulWeapon,
+};
+
 #[allow(dead_code)]
-pub struct Ghoul {}
+pub struct Ghoul {
+    ghoul_type: GhoulType,
+    health: GhoulHealth,
+    armour: GhoulArmour,
+    mana: GhoulMana,
+    weapon: GhoulWeapon,
+}
 
 impl Ghoul {
     #[allow(dead_code)]

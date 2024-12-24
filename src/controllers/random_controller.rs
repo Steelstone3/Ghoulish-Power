@@ -6,6 +6,7 @@ use rand::{rngs::StdRng, Rng, SeedableRng};
 pub trait RandomGenerator {
     fn random_value_i32(seed: u64, range: Range<i32>) -> i32;
     #[allow(dead_code)]
+    fn generate_seeds(amount: usize) -> Vec<u64>;
     fn generate_seed() -> u64;
 }
 
@@ -19,6 +20,20 @@ impl RandomGenerator for RandomController {
     }
 
     #[allow(dead_code)]
+    fn generate_seeds(amount: usize) -> Vec<u64> {
+        if amount == 0 {
+            panic!("0 is not a valid number of seeds to generate")
+        }
+
+        let mut seeds: Vec<u64> = vec![];
+
+        for _ in 0..amount {
+            seeds.push(RandomController::generate_seed());
+        }
+
+        seeds
+    }
+
     fn generate_seed() -> u64 {
         let mut rng = rand::thread_rng();
 
@@ -30,6 +45,16 @@ impl RandomGenerator for RandomController {
 mod controller_should {
     use super::*;
     use rstest::rstest;
+
+    #[test]
+    #[should_panic]
+    fn invalid_number_of_seeds_to_generate() {
+        // Given
+        let amount = 0;
+
+        // When
+        RandomController::generate_seeds(amount);
+    }
 
     #[rstest]
     #[case( 0, 0..1000, 801)]
