@@ -1,8 +1,9 @@
 use std::fmt::Display;
 
 #[allow(dead_code)]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Default)]
 pub enum ArmourType {
+    #[default]
     FullPlate,
     ChainMail,
 }

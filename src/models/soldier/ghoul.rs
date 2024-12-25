@@ -1,6 +1,9 @@
+use pseudo::Mock;
+
 use super::{
     constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
-    types::ghoul_types::GhoulType,
+    elements::Element,
+    types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
     weapon::GhoulWeapon,
 };
 use crate::presenters::ghoul_presenter::GhoulPresenter;
@@ -30,24 +33,53 @@ impl Ghoul {
 mod ghoul_should {
     use super::Ghoul;
     use crate::{
-        models::soldier::types::ghoul_types::GhoulType,
-        presenters::ghoul_presenter::MockGhoulPresenter,
+        models::soldier::{elements::Element, types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType}},
+        presenters::ghoul_presenter::GhoulPresenter,
     };
+    use pseudo::Mock;
 
     #[test]
-    #[ignore = "mock fails don't know why"]
     fn construct_player_generated_ghoul() {
         // Given
-        let mut ghoul_presenter = MockGhoulPresenter::new();
-        ghoul_presenter
-            .expect_select_ghoul_type()
-            .times(1)
-            .return_const(GhoulType::Undead);
+        let ghoul_presenter = MockGhoulPresenter {
+            select_ghoul_type: Mock::default(),
+            select_weapon_type: Mock::default(),
+            select_armour_type: Mock::default(),
+            select_element: Mock::default(),
+        };
 
         // When
         let _ghoul = Ghoul::new(&ghoul_presenter);
 
         // Then
-        ghoul_presenter.expect_select_ghoul_type().times(1);
+        assert_eq!(1, ghoul_presenter.select_ghoul_type.num_calls());
+        assert_eq!(1, ghoul_presenter.select_weapon_type.num_calls());
+        assert_eq!(1, ghoul_presenter.select_armour_type.num_calls());
+        assert_eq!(2, ghoul_presenter.select_element.num_calls());
+    }
+
+    pub struct MockGhoulPresenter {
+        pub select_ghoul_type: Mock<(), GhoulType>,
+        pub select_weapon_type: Mock<(), WeaponType>,
+        pub select_armour_type: Mock<(), ArmourType>,
+        pub select_element: Mock<(), Element>,
+    }
+
+    impl GhoulPresenter for MockGhoulPresenter {
+        fn select_ghoul_type(&self) -> GhoulType {
+            self.select_ghoul_type.call(())
+        }
+
+        fn select_weapon_type(&self) -> WeaponType {
+            self.select_weapon_type.call(())
+        }
+
+        fn select_armour_type(&self) -> ArmourType {
+            self.select_armour_type.call(())
+        }
+
+        fn select_element(&self) -> Element {
+            self.select_element.call(())
+        }
     }
 }

@@ -3,7 +3,6 @@ use crate::models::soldier::{
     types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
 };
 use inquire::{error::InquireError, Select};
-use mockall::automock;
 
 pub struct GhoulConsole;
 
@@ -48,7 +47,6 @@ impl GhoulPresenter for GhoulConsole {
 }
 
 #[allow(dead_code)]
-#[automock]
 pub trait GhoulPresenter {
     fn select_ghoul_type(&self) -> GhoulType;
     fn select_weapon_type(&self) -> WeaponType;
