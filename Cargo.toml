@@ -1,6 +1,6 @@
 [package]
 name = "ghoulish-power"
-version = "0.1.2"
+version = "0.1.4"
 authors = ["Skippy <steelstone3@gmail.com>"]
 edition = "2021"
 homepage = "https://github.com/Steelstone3/Ghoulish-Power"
