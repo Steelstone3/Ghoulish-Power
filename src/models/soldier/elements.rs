@@ -1,9 +1,10 @@
 use std::fmt::Display;
 
 #[allow(dead_code)]
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Default)]
 pub enum Element {
     Earth,
+    #[default]
     Air,
     Fire,
     Water,

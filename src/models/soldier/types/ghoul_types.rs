@@ -1,8 +1,9 @@
 use std::fmt::Display;
 
 #[allow(dead_code)]
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Debug, PartialEq, Clone, Copy, Default)]
 pub enum GhoulType {
+    #[default]
     Undead,
     Light,
     Dark,

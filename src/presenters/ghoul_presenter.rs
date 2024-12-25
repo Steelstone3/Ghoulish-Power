@@ -3,7 +3,6 @@ use crate::models::soldier::{
     types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
 };
 use inquire::{error::InquireError, Select};
-use mockall::automock;
 
 pub struct GhoulConsole;
 
@@ -29,7 +28,7 @@ impl GhoulPresenter for GhoulConsole {
         ArmourType::ChainMail
     }
 
-    fn select_element(&self) -> Element {
+    fn select_element(&self, message: String) -> Element {
         let options: Vec<&Element> = vec![
             &Element::Fire,
             &Element::Water,
@@ -37,7 +36,8 @@ impl GhoulPresenter for GhoulConsole {
             &Element::Earth,
         ];
 
-        let ans: Result<&Element, InquireError> = Select::new("Select element:", options).prompt();
+        let ans: Result<&Element, InquireError> =
+            Select::new(&format!("Select {} element:", message), options).prompt();
 
         if let Ok(choice) = ans {
             choice.to_owned()
@@ -48,10 +48,9 @@ impl GhoulPresenter for GhoulConsole {
 }
 
 #[allow(dead_code)]
-#[automock]
 pub trait GhoulPresenter {
     fn select_ghoul_type(&self) -> GhoulType;
     fn select_weapon_type(&self) -> WeaponType;
     fn select_armour_type(&self) -> ArmourType;
-    fn select_element(&self) -> Element;
+    fn select_element(&self, message: String) -> Element;
 }
