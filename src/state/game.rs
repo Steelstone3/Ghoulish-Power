@@ -1,3 +1,5 @@
+use mockall::automock;
+
 use super::{game_loop::GameLooper, states::State};
 use crate::{models::soldier::ghoul::Ghoul, presenters::ghoul_presenter::GhoulPresenter};
 
@@ -14,9 +16,16 @@ impl GhoulishPower {
             player: Ghoul::new(ghoul_presenter),
         }
     }
+}
 
+impl Game for GhoulishPower {
     #[allow(dead_code)]
-    pub fn game_loop(&mut self, _game_loop: &dyn GameLooper) {}
+    fn game_loop(&mut self, _game_loop: &dyn GameLooper) {}
+}
+
+#[automock]
+pub trait Game {
+    fn game_loop(&mut self, _game_loop: &dyn GameLooper);
 }
 
 #[cfg(test)]

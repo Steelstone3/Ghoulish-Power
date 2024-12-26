@@ -1,3 +1,5 @@
+use mockall::automock;
+
 pub struct GameLoop;
 
 impl GameLooper for GameLoop {
@@ -7,6 +9,7 @@ impl GameLooper for GameLoop {
 }
 
 #[allow(dead_code)]
+#[automock]
 pub trait GameLooper {
     fn run(&self);
 }
