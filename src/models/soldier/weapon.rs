@@ -25,35 +25,33 @@ pub trait Weapon {}
 
 #[cfg(test)]
 mod weapon_should {
+    use mockall::predicate::eq;
+
     use crate::{
         models::soldier::{
-            elements::Element,
-            types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
-            weapon::GhoulWeapon,
+            elements::Element, types::weapon_types::WeaponType, weapon::GhoulWeapon,
         },
-        presenters::ghoul_presenter::{GhoulPresenter, MockGhoulPresenter},
+        presenters::ghoul_presenter::MockGhoulPresenter,
     };
 
     #[test]
-    #[ignore = "not implemented"]
     fn construct_player_generated_weapon() {
         // Given
-        let ghoul_presenter = MockGhoulPresenter::new();
-        // {
-        //     select_ghoul_type: Mock::default(),
-        //     select_weapon_type: Mock::default(),
-        //     select_armour_type: Mock::default(),
-        //     select_element: Mock::default(),
-        // };
+        let mut ghoul_presenter = MockGhoulPresenter::new();
+        ghoul_presenter
+            .expect_select_weapon_type()
+            .once()
+            .return_const(WeaponType::Sword);
+        ghoul_presenter
+            .expect_select_element()
+            .with(eq("weapon".to_string()))
+            .once()
+            .return_const(Element::Water);
 
         // When
         let ghoul_weapon = GhoulWeapon::new(&ghoul_presenter);
 
         // Then
-        // assert_eq!(1, ghoul_presenter.select_weapon_type.num_calls());
-        // assert_eq!(1, ghoul_presenter.select_element.num_calls());
-        // assert_eq!(0, ghoul_presenter.select_ghoul_type.num_calls());
-        // assert_eq!(0, ghoul_presenter.select_armour_type.num_calls());
         assert_eq!(5..10, ghoul_weapon.damage);
     }
 }
