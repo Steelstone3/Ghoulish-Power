@@ -16,10 +16,10 @@ impl GhoulPresenter for GhoulConsole {
             &GhoulType::Soulless,
         ];
 
-        let ans: Result<&GhoulType, InquireError> =
+        let selection: Result<&GhoulType, InquireError> =
             Select::new("Select ghoul type:", options).prompt();
 
-        if let Ok(choice) = ans {
+        if let Ok(choice) = selection {
             choice.to_owned()
         } else {
             GhoulType::default()
@@ -29,10 +29,10 @@ impl GhoulPresenter for GhoulConsole {
     fn select_weapon_type(&self) -> WeaponType {
         let options: Vec<&WeaponType> = vec![&WeaponType::Sword, &WeaponType::Katana];
 
-        let ans: Result<&WeaponType, InquireError> =
+        let selection: Result<&WeaponType, InquireError> =
             Select::new("Select ghoul type:", options).prompt();
 
-        if let Ok(choice) = ans {
+        if let Ok(choice) = selection {
             choice.to_owned()
         } else {
             WeaponType::default()
@@ -42,10 +42,10 @@ impl GhoulPresenter for GhoulConsole {
     fn select_armour_type(&self) -> ArmourType {
         let options: Vec<&ArmourType> = vec![&ArmourType::FullPlate, &ArmourType::ChainMail];
 
-        let ans: Result<&ArmourType, InquireError> =
+        let selection: Result<&ArmourType, InquireError> =
             Select::new("Select ghoul type:", options).prompt();
 
-        if let Ok(choice) = ans {
+        if let Ok(choice) = selection {
             choice.to_owned()
         } else {
             ArmourType::default()
@@ -60,10 +60,10 @@ impl GhoulPresenter for GhoulConsole {
             &Element::Earth,
         ];
 
-        let ans: Result<&Element, InquireError> =
+        let selection: Result<&Element, InquireError> =
             Select::new(&format!("Select {} element:", message), options).prompt();
 
-        if let Ok(choice) = ans {
+        if let Ok(choice) = selection {
             choice.to_owned()
         } else {
             Element::default()
