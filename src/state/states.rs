@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-#[derive(Default)]
+#[derive(Default, PartialEq, Debug)]
 pub enum State {
     #[default]
     NewGame,
