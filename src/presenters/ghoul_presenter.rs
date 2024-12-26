@@ -30,7 +30,7 @@ impl GhoulPresenter for GhoulConsole {
         let options: Vec<&WeaponType> = vec![&WeaponType::Sword, &WeaponType::Katana];
 
         let selection: Result<&WeaponType, InquireError> =
-            Select::new("Select ghoul type:", options).prompt();
+            Select::new("Select weapon type:", options).prompt();
 
         if let Ok(choice) = selection {
             choice.to_owned()
@@ -43,7 +43,7 @@ impl GhoulPresenter for GhoulConsole {
         let options: Vec<&ArmourType> = vec![&ArmourType::FullPlate, &ArmourType::ChainMail];
 
         let selection: Result<&ArmourType, InquireError> =
-            Select::new("Select ghoul type:", options).prompt();
+            Select::new("Select armour type:", options).prompt();
 
         if let Ok(choice) = selection {
             choice.to_owned()
