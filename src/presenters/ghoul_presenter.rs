@@ -8,7 +8,13 @@ pub struct GhoulConsole;
 
 impl GhoulPresenter for GhoulConsole {
     fn select_ghoul_type(&self) -> GhoulType {
-        let options: Vec<&GhoulType> = vec![&GhoulType::Undead];
+        let options: Vec<&GhoulType> = vec![
+            &GhoulType::Undead,
+            &GhoulType::Light,
+            &GhoulType::Dark,
+            &GhoulType::Death,
+            &GhoulType::Soulless,
+        ];
 
         let ans: Result<&GhoulType, InquireError> =
             Select::new("Select ghoul type:", options).prompt();
@@ -16,16 +22,34 @@ impl GhoulPresenter for GhoulConsole {
         if let Ok(choice) = ans {
             choice.to_owned()
         } else {
-            GhoulType::Undead
+            GhoulType::default()
         }
     }
 
     fn select_weapon_type(&self) -> WeaponType {
-        WeaponType::Katana
+        let options: Vec<&WeaponType> = vec![&WeaponType::Sword, &WeaponType::Katana];
+
+        let ans: Result<&WeaponType, InquireError> =
+            Select::new("Select ghoul type:", options).prompt();
+
+        if let Ok(choice) = ans {
+            choice.to_owned()
+        } else {
+            WeaponType::default()
+        }
     }
 
     fn select_armour_type(&self) -> ArmourType {
-        ArmourType::ChainMail
+        let options: Vec<&ArmourType> = vec![&ArmourType::FullPlate, &ArmourType::ChainMail];
+
+        let ans: Result<&ArmourType, InquireError> =
+            Select::new("Select ghoul type:", options).prompt();
+
+        if let Ok(choice) = ans {
+            choice.to_owned()
+        } else {
+            ArmourType::default()
+        }
     }
 
     fn select_element(&self, message: String) -> Element {
@@ -42,7 +66,7 @@ impl GhoulPresenter for GhoulConsole {
         if let Ok(choice) = ans {
             choice.to_owned()
         } else {
-            Element::Air
+            Element::default()
         }
     }
 }
