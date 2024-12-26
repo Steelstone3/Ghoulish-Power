@@ -1,6 +1,6 @@
 [package]
 name = "ghoulish-power"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Skippy <steelstone3@gmail.com>"]
 edition = "2021"
 homepage = "https://github.com/Steelstone3/Ghoulish-Power"
@@ -19,4 +19,4 @@ inquire = "0.7"
 rand = "0"
 rand_derive2 = "0"
 rstest = "0"
-pseudo = "0"
+mockall = "0"
