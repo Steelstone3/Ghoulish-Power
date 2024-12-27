@@ -5,7 +5,6 @@ use rand::{rngs::StdRng, Rng, SeedableRng};
 #[allow(dead_code)]
 pub trait RandomGenerator {
     fn random_value_i32(seed: u64, range: Range<i32>) -> i32;
-    #[allow(dead_code)]
     fn generate_seeds(amount: usize) -> Vec<u64>;
     fn generate_seed() -> u64;
 }
@@ -19,7 +18,6 @@ impl RandomGenerator for RandomController {
         rng.gen_range(range.start..range.end)
     }
 
-    #[allow(dead_code)]
     fn generate_seeds(amount: usize) -> Vec<u64> {
         if amount == 0 {
             panic!("0 is not a valid number of seeds to generate")

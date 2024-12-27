@@ -3,7 +3,7 @@ use crate::{
     presenters::ghoul_presenter::GhoulPresenter,
 };
 
-#[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub struct GhoulArmour {
     pub armour: u32,
     pub armour_type: ArmourType,
@@ -25,33 +25,40 @@ pub trait Armour {}
 
 #[cfg(test)]
 mod armour_should {
-    use mockall::predicate::eq;
-
     use crate::{
         models::soldier::{
             constitution::armour::GhoulArmour, elements::Element, types::armour_types::ArmourType,
         },
         presenters::ghoul_presenter::MockGhoulPresenter,
     };
+    use mockall::predicate::eq;
 
     #[test]
     fn construct_player_generated_armour() {
         // Given
+        let armour_type = ArmourType::ChainMail;
+        let armour_element = Element::Fire;
+        let expected_ghoul_armour = GhoulArmour {
+            armour: 100,
+            armour_type,
+            armour_element,
+        };
+
         let mut ghoul_presenter = MockGhoulPresenter::new();
         ghoul_presenter
             .expect_select_armour_type()
             .once()
-            .return_const(ArmourType::ChainMail);
+            .return_const(armour_type);
         ghoul_presenter
             .expect_select_element()
             .with(eq("armour".to_string()))
             .once()
-            .return_const(Element::Fire);
+            .return_const(armour_element);
 
         // When
         let ghoul_armour = GhoulArmour::new(&ghoul_presenter);
 
         // Then
-        assert_eq!(100, ghoul_armour.armour);
+        assert_eq!(expected_ghoul_armour, ghoul_armour);
     }
 }

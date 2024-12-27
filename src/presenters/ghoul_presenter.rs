@@ -55,10 +55,13 @@ impl GhoulPresenter for GhoulConsole {
 
     fn select_element(&self, message: String) -> Element {
         let options: Vec<&Element> = vec![
-            &Element::Fire,
-            &Element::Water,
             &Element::Air,
+            &Element::Cosmic,
             &Element::Earth,
+            &Element::Fire,
+            &Element::Force,
+            &Element::Frost,
+            &Element::Water,
         ];
 
         let selection: Result<&Element, InquireError> =
@@ -72,7 +75,6 @@ impl GhoulPresenter for GhoulConsole {
     }
 }
 
-#[allow(dead_code)]
 #[automock]
 pub trait GhoulPresenter {
     fn select_ghoul_type(&self) -> GhoulType;

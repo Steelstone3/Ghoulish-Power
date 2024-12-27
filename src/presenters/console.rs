@@ -1,6 +1,5 @@
 use inquire::{Confirm, Text};
 
-#[allow(dead_code)]
 pub struct Console;
 
 impl Presenter for Console {

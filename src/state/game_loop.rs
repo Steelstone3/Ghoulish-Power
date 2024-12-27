@@ -8,7 +8,6 @@ impl GameLooper for GameLoop {
     }
 }
 
-#[allow(dead_code)]
 #[automock]
 pub trait GameLooper {
     fn run(&self);

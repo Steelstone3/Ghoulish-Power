@@ -6,6 +6,7 @@ use super::{
 use crate::presenters::ghoul_presenter::GhoulPresenter;
 
 #[allow(dead_code)]
+#[derive(Debug, PartialEq)]
 pub struct Ghoul {
     pub ghoul_type: GhoulType,
     pub health: GhoulHealth,
@@ -28,50 +29,79 @@ impl Ghoul {
 
 #[cfg(test)]
 mod ghoul_should {
-    use mockall::predicate::eq;
-
     use super::Ghoul;
     use crate::{
         models::soldier::{
+            constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
             elements::Element,
             types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
+            weapon::GhoulWeapon,
         },
         presenters::ghoul_presenter::MockGhoulPresenter,
     };
+    use mockall::predicate::eq;
 
     #[test]
     fn construct_player_generated_ghoul() {
         // Given
+        let ghoul_type = GhoulType::Undead;
+
+        let health = GhoulHealth { health: 100 };
+
+        let armour_type = ArmourType::FullPlate;
+        let armour_element = Element::Fire;
+        let armour = GhoulArmour {
+            armour: 100,
+            armour_type,
+            armour_element,
+        };
+
+        let mana = GhoulMana { mana: 100 };
+
+        let weapon_type = WeaponType::Sword;
+        let weapon_element = Element::Fire;
+        let weapon = GhoulWeapon {
+            weapon_type,
+            weapon_element,
+            damage: 5..10,
+        };
+
+        let expected_ghoul = Ghoul {
+            ghoul_type,
+            health,
+            armour,
+            mana,
+            weapon,
+        };
+
         let mut ghoul_presenter = MockGhoulPresenter::new();
         ghoul_presenter
             .expect_select_ghoul_type()
             .once()
-            .return_const(GhoulType::Undead);
+            .return_const(ghoul_type);
         ghoul_presenter
             .expect_select_weapon_type()
             .once()
-            .return_const(WeaponType::Sword);
+            .return_const(weapon_type);
         ghoul_presenter
             .expect_select_armour_type()
             .once()
-            .return_const(ArmourType::FullPlate);
+            .return_const(armour_type);
         ghoul_presenter
             .expect_select_element()
             .with(eq("armour".to_string()))
             .once()
-            .return_const(Element::Fire);
+            .return_const(armour_element);
         ghoul_presenter
             .expect_select_element()
             .with(eq("weapon".to_string()))
             .once()
-            .return_const(Element::Fire);
+            .return_const(weapon_element);
 
         // When
         let ghoul = Ghoul::new(&ghoul_presenter);
 
         // Then
-        assert_eq!(100, ghoul.health.health);
-        assert_eq!(100, ghoul.armour.armour);
-        assert_eq!(100, ghoul.mana.mana);
+        assert_eq!(expected_ghoul, ghoul);
     }
 }
