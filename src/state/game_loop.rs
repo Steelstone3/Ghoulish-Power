@@ -30,5 +30,13 @@ pub trait GameLooper {
 mod game_loop_should {
     #[test]
     #[ignore = "not implemented"]
-    fn run() {}
+    fn run_new_game() {}
+
+    #[test]
+    #[ignore = "not implemented"]
+    fn run_game_loop() {}
+
+    #[test]
+    #[ignore = "not implemented"]
+    fn run_game_over() {}
 }
