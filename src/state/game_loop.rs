@@ -1,4 +1,4 @@
-use crate::presenters::console::Presenter;
+use crate::{models::soldier::ghoul::Ghoul, presenters::console::Presenter};
 
 use super::{game::GhoulishPower, states::State};
 use mockall::automock;
@@ -13,6 +13,16 @@ impl GameLoop {
 
     fn game_loop(&self, _game: &mut GhoulishPower) -> State {
         State::GameOver
+    }
+
+    #[allow(dead_code)]
+    fn create_enemies() -> Vec<Ghoul> {
+        todo!()
+    }
+
+    #[allow(dead_code)]
+    fn turn() {
+        todo!()
     }
 
     fn game_over(&self, presenter: &dyn Presenter) -> State {
