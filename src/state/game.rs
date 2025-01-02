@@ -108,7 +108,11 @@ mod game_should {
             .once()
             .return_const(weapon_element);
 
-        let expected_ghoulish_power = GhoulishPower { state, player, enemies: vec![] };
+        let expected_ghoulish_power = GhoulishPower {
+            state,
+            player,
+            enemies: vec![],
+        };
 
         // When
         let ghoulish_power = GhoulishPower::new(&ghoul_presenter);
