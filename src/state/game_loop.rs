@@ -12,3 +12,10 @@ impl GameLooper for GameLoop {
 pub trait GameLooper {
     fn run(&self);
 }
+
+#[cfg(test)]
+mod game_loop_should {
+    #[test]
+    #[ignore = "not implemented"]
+    fn run() {}
+}
