@@ -6,34 +6,34 @@ use mockall::automock;
 pub struct GameLoop;
 
 impl GameLoop {
-    fn new_game(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) {
+    fn new_game(&self, presenter: &dyn Presenter) -> State {
         presenter.print("New game");
-        game.state = State::GameLoop;
+        State::GameLoop
     }
 
-    fn game_loop(&self, game: &mut GhoulishPower) {
-        game.state = State::GameOver;
+    fn game_loop(&self, game: &mut GhoulishPower) -> State {
+        State::GameOver
     }
 
-    fn game_over(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) {
+    fn game_over(&self, presenter: &dyn Presenter) -> State {
         presenter.print("Game over");
-        game.state = State::NewGame;
+        State::NewGame
     }
 }
 
 impl GameLooper for GameLoop {
-    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) {
+    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> State {
         match game.state {
-            State::NewGame => self.new_game(game, presenter),
+            State::NewGame => self.new_game(presenter),
             State::GameLoop => self.game_loop(game),
-            State::GameOver => self.game_over(game, presenter),
+            State::GameOver => self.game_over(presenter),
         }
     }
 }
 
 #[automock]
 pub trait GameLooper {
-    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter);
+    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> State;
 }
 
 #[cfg(test)]
@@ -55,73 +55,21 @@ mod game_loop_should {
     #[test]
     fn run_new_game() {
         // Given
-        let ghoul = test_fixture_ghoul();
-
-        let mut game = GhoulishPower {
-            state: State::NewGame,
-            player: ghoul,
-            enemies: vec![],
-        };
-
         let mut presenter = MockPresenter::new();
         presenter.expect_print().with(eq("New game")).once();
 
         let game_loop = GameLoop;
 
         // When
-        game_loop.new_game(&mut game, &presenter);
+        let state = game_loop.new_game(&presenter);
 
         // Then
-        assert_eq!(State::GameLoop, game.state)
+        assert_eq!(State::GameLoop, state)
     }
 
     #[test]
     fn run_game_loop() {
         // Given
-        let ghoul = test_fixture_ghoul();
-
-        let mut game = GhoulishPower {
-            state: State::NewGame,
-            player: ghoul,
-            enemies: vec![],
-        };
-
-        // let mut presenter = MockPresenter::new();
-        // presenter.expect_print().with(eq("New game")).once();
-
-        let game_loop = GameLoop;
-
-        // When
-        game_loop.game_loop(&mut game);
-
-        // Then
-        assert_eq!(State::GameOver, game.state)
-    }
-
-    #[test]
-    fn run_game_over() {
-        // Given
-        let ghoul = test_fixture_ghoul();
-
-        let mut game = GhoulishPower {
-            state: State::NewGame,
-            player: ghoul,
-            enemies: vec![],
-        };
-
-        let mut presenter = MockPresenter::new();
-        presenter.expect_print().with(eq("Game over")).once();
-
-        let game_loop = GameLoop;
-
-        // When
-        game_loop.game_over(&mut game, &presenter);
-
-        // Then
-        assert_eq!(State::NewGame, game.state)
-    }
-
-    fn test_fixture_ghoul() -> Ghoul {
         let ghoul = Ghoul {
             ghoul_type: GhoulType::Dark,
             health: GhoulHealth { health: 100 },
@@ -137,6 +85,37 @@ mod game_loop_should {
                 damage: 5..10,
             },
         };
-        ghoul
+
+        let mut game = GhoulishPower {
+            state: State::NewGame,
+            player: ghoul,
+            enemies: vec![],
+        };
+
+        // let mut presenter = MockPresenter::new();
+        // presenter.expect_print().with(eq("New game")).once();
+
+        let game_loop = GameLoop;
+
+        // When
+        let state = game_loop.game_loop(&mut game);
+
+        // Then
+        assert_eq!(State::GameOver, state)
+    }
+
+    #[test]
+    fn run_game_over() {
+        // Given
+        let mut presenter = MockPresenter::new();
+        presenter.expect_print().with(eq("Game over")).once();
+
+        let game_loop = GameLoop;
+
+        // When
+        let state = game_loop.game_over(&presenter);
+
+        // Then
+        assert_eq!(State::NewGame, state)
     }
 }

@@ -27,7 +27,7 @@ impl GhoulishPower {
 impl Game for GhoulishPower {
     fn game_loop(&mut self, game_loop: &dyn GameLooper) {
         while self.state != State::GameOver {
-            game_loop.run(self, &Console);
+            self.state = game_loop.run(self, &Console);
         }
     }
 }
@@ -127,7 +127,7 @@ mod game_should {
     }
 
     #[test]
-    fn run_game_loop() {
+    fn run_game_loop_game_over() {
         // Given
         let mut ghoulish_power = GhoulishPower {
             state: State::GameOver,
@@ -151,6 +151,36 @@ mod game_should {
 
         let mut game_loop = MockGameLooper::new();
         game_loop.expect_run().never();
+
+        // When
+        ghoulish_power.game_loop(&game_loop);
+    }
+
+    #[test]
+    fn run_game_loop_new_game() {
+        // Given
+        let mut ghoulish_power = GhoulishPower {
+            state: State::NewGame,
+            player: Ghoul {
+                ghoul_type: GhoulType::Undead,
+                health: GhoulHealth { health: 100 },
+                armour: GhoulArmour {
+                    armour: 100,
+                    armour_type: ArmourType::FullPlate,
+                    armour_element: Element::Air,
+                },
+                mana: GhoulMana { mana: 100 },
+                weapon: GhoulWeapon {
+                    weapon_type: WeaponType::Sword,
+                    weapon_element: Element::Air,
+                    damage: 5..10,
+                },
+            },
+            enemies: vec![],
+        };
+
+        let mut game_loop = MockGameLooper::new();
+        game_loop.expect_run().return_const(State::GameOver).once();
 
         // When
         ghoulish_power.game_loop(&game_loop);
