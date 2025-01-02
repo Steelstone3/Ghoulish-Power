@@ -38,8 +38,7 @@ pub trait GameLooper {
 
 #[cfg(test)]
 mod game_loop_should {
-    use mockall::predicate::eq;
-
+    use super::GameLoop;
     use crate::{
         models::soldier::{
             constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
@@ -51,8 +50,7 @@ mod game_loop_should {
         presenters::console::MockPresenter,
         state::{game::GhoulishPower, states::State},
     };
-
-    use super::GameLoop;
+    use mockall::predicate::eq;
 
     #[test]
     fn run_new_game() {
