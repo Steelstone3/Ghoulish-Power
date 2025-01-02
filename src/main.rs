@@ -1,4 +1,4 @@
-use presenters::ghoul_presenter::GhoulConsole;
+use presenters::console::Console;
 use state::{
     game::{Game, GhoulishPower},
     game_loop::GameLoop,
@@ -14,7 +14,7 @@ mod state;
 #[deny(clippy::panic)]
 #[deny(unused_must_use)]
 fn main() {
-    let mut ghoulish_power = GhoulishPower::new(&GhoulConsole);
+    let mut ghoulish_power = GhoulishPower::new(&Console);
     let game_loop = GameLoop;
 
     ghoulish_power.game_loop(&game_loop);

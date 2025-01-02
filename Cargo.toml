@@ -1,6 +1,6 @@
 [package]
 name = "ghoulish-power"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Skippy <steelstone3@gmail.com>"]
 edition = "2021"
 homepage = "https://github.com/Steelstone3/Ghoulish-Power"
@@ -15,7 +15,9 @@ include = []
 
 [dependencies]
 # serde = { version = "1", features = ["derive"]  }
-mockall = { version = "0", features = ["nightly"] }
+# toml = "0"
+# rfd = "0"
+mockall = "0"
 inquire = "0.7"
 rand = "0"
 rand_derive2 = "0"

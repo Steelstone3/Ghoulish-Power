@@ -1,6 +1,8 @@
 use std::fmt::Display;
 
-#[derive(Debug, Copy, Clone, PartialEq, Default)]
+use rand_derive2::RandGen;
+
+#[derive(Debug, Copy, Clone, PartialEq, Default, RandGen)]
 pub enum Element {
     #[default]
     Air,

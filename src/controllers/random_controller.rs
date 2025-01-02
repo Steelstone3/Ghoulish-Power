@@ -19,11 +19,13 @@ impl RandomGenerator for RandomController {
     }
 
     fn generate_seeds(amount: usize) -> Vec<u64> {
-        if amount == 0 {
-            panic!("0 is not a valid number of seeds to generate")
-        }
-
         let mut seeds: Vec<u64> = vec![];
+
+        if amount < 1 {
+            seeds.push(RandomController::generate_seed());
+
+            return seeds;
+        }
 
         for _ in 0..amount {
             seeds.push(RandomController::generate_seed());
@@ -43,16 +45,6 @@ impl RandomGenerator for RandomController {
 mod random_controller_should {
     use super::*;
     use rstest::rstest;
-
-    #[test]
-    #[should_panic]
-    fn invalid_number_of_seeds_to_generate() {
-        // Given
-        let amount = 0;
-
-        // When
-        RandomController::generate_seeds(amount);
-    }
 
     #[rstest]
     #[case( 0, 0..1000, 801)]

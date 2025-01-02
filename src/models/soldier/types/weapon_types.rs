@@ -1,6 +1,8 @@
 use std::fmt::Display;
 
-#[derive(Clone, Copy, Debug, PartialEq, Default)]
+use rand_derive2::RandGen;
+
+#[derive(Clone, Copy, Debug, PartialEq, Default, RandGen)]
 pub enum WeaponType {
     Katana,
     #[default]

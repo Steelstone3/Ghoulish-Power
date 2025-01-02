@@ -2,6 +2,7 @@ use crate::{
     models::soldier::{elements::Element, types::armour_types::ArmourType},
     presenters::ghoul_presenter::GhoulPresenter,
 };
+use rand::random;
 
 #[derive(Debug, PartialEq)]
 pub struct GhoulArmour {
@@ -16,6 +17,14 @@ impl GhoulArmour {
             armour: 100,
             armour_type: ghoul_presenter.select_armour_type(),
             armour_element: ghoul_presenter.select_element("armour".to_string()),
+        }
+    }
+
+    pub fn new_random() -> Self {
+        Self {
+            armour: 100,
+            armour_type: random(),
+            armour_element: random(),
         }
     }
 }

@@ -1,27 +1,39 @@
 use mockall::automock;
 
-use super::{game_loop::GameLooper, states::State};
-use crate::{models::soldier::ghoul::Ghoul, presenters::ghoul_presenter::GhoulPresenter};
+use super::{
+    game_loop::GameLooper,
+    states::{GameState, State},
+};
+use crate::{
+    models::soldier::ghoul::Ghoul,
+    presenters::{console::Console, ghoul_presenter::GhoulPresenter},
+};
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 pub struct GhoulishPower {
+    pub game_state: GameState,
     pub state: State,
     pub player: Ghoul,
+    pub enemies: Vec<Ghoul>,
 }
 
 impl GhoulishPower {
     pub fn new(ghoul_presenter: &dyn GhoulPresenter) -> Self {
         Self {
-            state: Default::default(),
+            game_state: Default::default(),
+            state: State::default(),
             player: Ghoul::new(ghoul_presenter),
+            enemies: vec![],
         }
     }
 }
 
 impl Game for GhoulishPower {
     fn game_loop(&mut self, game_loop: &dyn GameLooper) {
-        game_loop.run();
+        while self.game_state != GameState::GameOver {
+            self.game_state = game_loop.run(self, &Console);
+        }
     }
 }
 
@@ -41,7 +53,11 @@ mod game_should {
             weapon::GhoulWeapon,
         },
         presenters::ghoul_presenter::MockGhoulPresenter,
-        state::{game::GhoulishPower, game_loop::MockGameLooper, states::State},
+        state::{
+            game::GhoulishPower,
+            game_loop::MockGameLooper,
+            states::{GameState, State},
+        },
     };
     use mockall::predicate::eq;
 
@@ -50,7 +66,7 @@ mod game_should {
     #[test]
     fn construct_player() {
         // Given
-        let state = State::NewGame;
+        let state = GameState::NewGame;
 
         let ghoul_type = GhoulType::Undead;
 
@@ -106,7 +122,12 @@ mod game_should {
             .once()
             .return_const(weapon_element);
 
-        let expected_ghoulish_power = GhoulishPower { state, player };
+        let expected_ghoulish_power = GhoulishPower {
+            game_state: state,
+            player,
+            enemies: vec![],
+            state: State::default(),
+        };
 
         // When
         let ghoulish_power = GhoulishPower::new(&ghoul_presenter);
@@ -116,10 +137,10 @@ mod game_should {
     }
 
     #[test]
-    fn run_game_loop() {
+    fn run_game_loop_game_over() {
         // Given
         let mut ghoulish_power = GhoulishPower {
-            state: State::NewGame,
+            game_state: GameState::GameOver,
             player: Ghoul {
                 ghoul_type: GhoulType::Undead,
                 health: GhoulHealth { health: 100 },
@@ -135,10 +156,46 @@ mod game_should {
                     damage: 5..10,
                 },
             },
+            enemies: vec![],
+            state: State::default(),
         };
 
         let mut game_loop = MockGameLooper::new();
-        game_loop.expect_run().once();
+        game_loop.expect_run().never();
+
+        // When
+        ghoulish_power.game_loop(&game_loop);
+    }
+
+    #[test]
+    fn run_game_loop_new_game() {
+        // Given
+        let mut ghoulish_power = GhoulishPower {
+            game_state: GameState::NewGame,
+            player: Ghoul {
+                ghoul_type: GhoulType::Undead,
+                health: GhoulHealth { health: 100 },
+                armour: GhoulArmour {
+                    armour: 100,
+                    armour_type: ArmourType::FullPlate,
+                    armour_element: Element::Air,
+                },
+                mana: GhoulMana { mana: 100 },
+                weapon: GhoulWeapon {
+                    weapon_type: WeaponType::Sword,
+                    weapon_element: Element::Air,
+                    damage: 5..10,
+                },
+            },
+            enemies: vec![],
+            state: State::default(),
+        };
+
+        let mut game_loop = MockGameLooper::new();
+        game_loop
+            .expect_run()
+            .return_const(GameState::GameOver)
+            .once();
 
         // When
         ghoulish_power.game_loop(&game_loop);
