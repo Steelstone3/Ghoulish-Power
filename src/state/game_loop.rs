@@ -11,7 +11,7 @@ impl GameLoop {
         State::GameLoop
     }
 
-    fn game_loop(&self, game: &mut GhoulishPower) -> State {
+    fn game_loop(&self, _game: &mut GhoulishPower) -> State {
         State::GameOver
     }
 
