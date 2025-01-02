@@ -21,7 +21,7 @@ impl GhoulishPower {
 
 impl Game for GhoulishPower {
     fn game_loop(&mut self, game_loop: &dyn GameLooper) {
-        game_loop.run();
+        game_loop.run(self);
     }
 }
 

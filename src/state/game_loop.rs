@@ -1,16 +1,15 @@
+use super::game::GhoulishPower;
 use mockall::automock;
 
 pub struct GameLoop;
 
 impl GameLooper for GameLoop {
-    fn run(&self) {
-        todo!()
-    }
+    fn run(&self, _game: &mut GhoulishPower) {}
 }
 
 #[automock]
 pub trait GameLooper {
-    fn run(&self);
+    fn run(&self, game: &mut GhoulishPower);
 }
 
 #[cfg(test)]
