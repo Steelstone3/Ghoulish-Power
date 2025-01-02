@@ -1,7 +1,10 @@
 use mockall::automock;
 
 use super::{game_loop::GameLooper, states::State};
-use crate::{models::soldier::ghoul::Ghoul, presenters::{console::Console, ghoul_presenter::GhoulPresenter}};
+use crate::{
+    models::soldier::ghoul::Ghoul,
+    presenters::{console::Console, ghoul_presenter::GhoulPresenter},
+};
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]

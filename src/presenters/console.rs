@@ -31,6 +31,7 @@ impl Presenter for Console {
     }
 }
 
+#[allow(dead_code)]
 #[automock]
 pub trait Presenter {
     fn print(&self, message: &str);
