@@ -6,13 +6,19 @@ use mockall::automock;
 pub struct GameLoop;
 
 impl GameLoop {
-    fn new_game(&self, _game: &mut GhoulishPower, presenter: &dyn Presenter) {
+    fn new_game(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) {
         presenter.print("New game");
+        game.state = State::GameLoop;
     }
 
-    fn game_loop(&self, _game: &mut GhoulishPower) {}
+    fn game_loop(&self, game: &mut GhoulishPower) {
+        game.state = State::GameOver;
+    }
 
-    fn game_over(&self, _game: &mut GhoulishPower) {}
+    fn game_over(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) {
+        presenter.print("Game over");
+        game.state = State::NewGame;
+    }
 }
 
 impl GameLooper for GameLoop {
@@ -20,7 +26,7 @@ impl GameLooper for GameLoop {
         match game.state {
             State::NewGame => self.new_game(game, presenter),
             State::GameLoop => self.game_loop(game),
-            State::GameOver => self.game_over(game),
+            State::GameOver => self.game_over(game, presenter),
         }
     }
 }
@@ -51,6 +57,73 @@ mod game_loop_should {
     #[test]
     fn run_new_game() {
         // Given
+        let ghoul = test_fixture_ghoul();
+
+        let mut game = GhoulishPower {
+            state: State::NewGame,
+            player: ghoul,
+            enemies: vec![],
+        };
+
+        let mut presenter = MockPresenter::new();
+        presenter.expect_print().with(eq("New game")).once();
+
+        let game_loop = GameLoop;
+
+        // When
+        game_loop.new_game(&mut game, &presenter);
+
+        // Then
+        assert_eq!(State::GameLoop, game.state)
+    }
+
+    #[test]
+    fn run_game_loop() {
+        // Given
+        let ghoul = test_fixture_ghoul();
+
+        let mut game = GhoulishPower {
+            state: State::NewGame,
+            player: ghoul,
+            enemies: vec![],
+        };
+
+        // let mut presenter = MockPresenter::new();
+        // presenter.expect_print().with(eq("New game")).once();
+
+        let game_loop = GameLoop;
+
+        // When
+        game_loop.game_loop(&mut game);
+
+        // Then
+        assert_eq!(State::GameOver, game.state)
+    }
+
+    #[test]
+    fn run_game_over() {
+        // Given
+        let ghoul = test_fixture_ghoul();
+
+        let mut game = GhoulishPower {
+            state: State::NewGame,
+            player: ghoul,
+            enemies: vec![],
+        };
+
+        let mut presenter = MockPresenter::new();
+        presenter.expect_print().with(eq("Game over")).once();
+
+        let game_loop = GameLoop;
+
+        // When
+        game_loop.game_over(&mut game, &presenter);
+
+        // Then
+        assert_eq!(State::NewGame, game.state)
+    }
+
+    fn test_fixture_ghoul() -> Ghoul {
         let ghoul = Ghoul {
             ghoul_type: GhoulType::Dark,
             health: GhoulHealth { health: 100 },
@@ -66,27 +139,6 @@ mod game_loop_should {
                 damage: 5..10,
             },
         };
-
-        let mut game = GhoulishPower {
-            state: State::NewGame,
-            player: ghoul,
-            enemies: vec![],
-        };
-
-        let mut presenter = MockPresenter::new();
-        presenter.expect_print().with(eq("New game")).once();
-
-        let game_loop = GameLoop;
-
-        // When
-        game_loop.new_game(&mut game, &presenter);
+        ghoul
     }
-
-    #[test]
-    #[ignore = "not implemented"]
-    fn run_game_loop() {}
-
-    #[test]
-    #[ignore = "not implemented"]
-    fn run_game_over() {}
 }
