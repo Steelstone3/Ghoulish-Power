@@ -8,6 +8,7 @@ use crate::{models::soldier::ghoul::Ghoul, presenters::ghoul_presenter::GhoulPre
 pub struct GhoulishPower {
     pub state: State,
     pub player: Ghoul,
+    pub enemies: Vec<Ghoul>,
 }
 
 impl GhoulishPower {
@@ -15,6 +16,7 @@ impl GhoulishPower {
         Self {
             state: Default::default(),
             player: Ghoul::new(ghoul_presenter),
+            enemies: vec![],
         }
     }
 }
@@ -106,7 +108,7 @@ mod game_should {
             .once()
             .return_const(weapon_element);
 
-        let expected_ghoulish_power = GhoulishPower { state, player };
+        let expected_ghoulish_power = GhoulishPower { state, player, enemies: vec![] };
 
         // When
         let ghoulish_power = GhoulishPower::new(&ghoul_presenter);
@@ -135,6 +137,7 @@ mod game_should {
                     damage: 5..10,
                 },
             },
+            enemies: vec![],
         };
 
         let mut game_loop = MockGameLooper::new();
