@@ -1,7 +1,7 @@
 use mockall::automock;
 
 use super::{game_loop::GameLooper, states::State};
-use crate::{models::soldier::ghoul::Ghoul, presenters::ghoul_presenter::GhoulPresenter};
+use crate::{models::soldier::ghoul::Ghoul, presenters::{console::Console, ghoul_presenter::GhoulPresenter}};
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
@@ -23,7 +23,7 @@ impl GhoulishPower {
 
 impl Game for GhoulishPower {
     fn game_loop(&mut self, game_loop: &dyn GameLooper) {
-        game_loop.run(self);
+        game_loop.run(self, &Console);
     }
 }
 

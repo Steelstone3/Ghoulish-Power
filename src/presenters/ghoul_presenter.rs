@@ -1,3 +1,4 @@
+use super::console::Console;
 use crate::models::soldier::{
     elements::Element,
     types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
@@ -5,9 +6,7 @@ use crate::models::soldier::{
 use inquire::{error::InquireError, Select};
 use mockall::automock;
 
-pub struct GhoulConsole;
-
-impl GhoulPresenter for GhoulConsole {
+impl GhoulPresenter for Console {
     fn select_ghoul_type(&self) -> GhoulType {
         let options: Vec<&GhoulType> = vec![
             &GhoulType::Undead,
