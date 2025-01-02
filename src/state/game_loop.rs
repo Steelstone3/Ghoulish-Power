@@ -1,10 +1,24 @@
-use super::game::GhoulishPower;
+use super::{game::GhoulishPower, states::State};
 use mockall::automock;
 
 pub struct GameLoop;
 
+impl GameLoop {
+    fn new_game(&self, _game: &mut GhoulishPower) {}
+
+    fn game_loop(&self, _game: &mut GhoulishPower) {}
+
+    fn game_over(&self, _game: &mut GhoulishPower) {}
+}
+
 impl GameLooper for GameLoop {
-    fn run(&self, _game: &mut GhoulishPower) {}
+    fn run(&self, game: &mut GhoulishPower) {
+        match game.state {
+            State::NewGame => self.new_game(game),
+            State::GameLoop => self.game_loop(game),
+            State::GameOver => self.game_over(game),
+        }
+    }
 }
 
 #[automock]
