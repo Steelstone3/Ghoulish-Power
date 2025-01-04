@@ -45,12 +45,20 @@ impl Ghoul {
     pub fn take_damage(&mut self, weapon: &dyn Weapon) {
         let damage = weapon.attack();
 
-        if damage >= self.armour.armour + self.health.health {
-            self.armour.armour = 0;
-            self.health.health = 0;
-            self.is_dead = true;
-        } else if damage < self.armour.armour {
+        if damage <= self.armour.armour {
             self.armour.armour -= damage
+        } else {
+            self.armour.armour = 0;
+
+            if damage <= self.health.health {
+                self.health.health -= damage;
+            } else {
+                self.health.health = 0;
+            }
+        }
+
+        if self.health.health == 0 {
+            self.is_dead = true;
         }
     }
 }
@@ -142,15 +150,15 @@ mod ghoul_should {
     #[case(100, 90, 100, 100, 10, false)]
     #[case(100, 85, 100, 100, 15, false)]
     #[case(100, 1, 100, 100, 99, false)]
-    // #[case(100, 0, 100, 100, 100, false)]
-    // #[case(100, 0, 100, 100, 101, false)]
-    // #[case(100, 0, 100, 100, 200, false)]
-    // #[case(10, 0, 100, 100, 11, false)]
-    // #[case(0, 0, 100, 99, 1, false)]
-    // #[case(0, 0, 100, 95, 5, false)]
-    // #[case(0, 0, 100, 90, 10, false)]
-    // #[case(0, 0, 100, 85, 15, false)]
-    // #[case(0, 0, 100, 1, 99, false)]
+    #[case(100, 0, 100, 100, 100, false)]
+    #[case(100, 0, 100, 100, 101, false)]
+    #[case(100, 0, 100, 100, 200, false)]
+    #[case(10, 0, 100, 100, 11, false)]
+    #[case(0, 0, 100, 99, 1, false)]
+    #[case(0, 0, 100, 95, 5, false)]
+    #[case(0, 0, 100, 90, 10, false)]
+    #[case(0, 0, 100, 85, 15, false)]
+    #[case(0, 0, 100, 1, 99, false)]
     #[case(0, 0, 100, 0, 100, true)]
     #[case(0, 0, 100, 0, 101, true)]
     #[case(0, 0, 100, 0, 200, true)]
