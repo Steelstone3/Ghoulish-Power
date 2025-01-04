@@ -1,3 +1,5 @@
+use rand::random;
+
 use crate::presenters::ghoul_presenter::GhoulPresenter;
 
 use super::{elements::Element, types::weapon_types::WeaponType};
@@ -15,6 +17,14 @@ impl GhoulWeapon {
         Self {
             weapon_type: ghoul_presenter.select_weapon_type(),
             weapon_element: ghoul_presenter.select_element("weapon".to_string()),
+            damage: 5..10,
+        }
+    }
+
+    pub fn new_random() -> Self {
+        Self {
+            weapon_type: random(),
+            weapon_element: random(),
             damage: 5..10,
         }
     }

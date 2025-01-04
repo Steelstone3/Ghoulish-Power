@@ -1,6 +1,7 @@
 use std::fmt::Display;
+use rand_derive2::RandGen;
 
-#[derive(Debug, PartialEq, Clone, Copy, Default)]
+#[derive(Debug, PartialEq, Clone, Copy, Default, RandGen)]
 pub enum GhoulType {
     Dark,
     Death,

@@ -1,9 +1,14 @@
 use super::{
-    constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
+    constitution::{
+        armour::GhoulArmour,
+        health::GhoulHealth,
+        mana::GhoulMana,
+    },
     types::ghoul_types::GhoulType,
     weapon::GhoulWeapon,
 };
 use crate::presenters::ghoul_presenter::GhoulPresenter;
+use rand::random;
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
@@ -16,13 +21,23 @@ pub struct Ghoul {
 }
 
 impl Ghoul {
-    pub fn new(ghoul_presenter: &dyn GhoulPresenter) -> Ghoul {
-        Ghoul {
+    pub fn new(ghoul_presenter: &dyn GhoulPresenter) -> Self {
+        Self {
             ghoul_type: ghoul_presenter.select_ghoul_type(),
             health: GhoulHealth::default(),
             armour: GhoulArmour::new(ghoul_presenter),
             mana: GhoulMana::default(),
             weapon: GhoulWeapon::new(ghoul_presenter),
+        }
+    }
+
+    pub fn new_random() -> Self {
+        Self {
+            ghoul_type: random(),
+            health: GhoulHealth::default(),
+            armour: GhoulArmour::new_random(),
+            mana: GhoulMana::default(),
+            weapon: GhoulWeapon::new_random(),
         }
     }
 }

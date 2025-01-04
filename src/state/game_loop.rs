@@ -1,23 +1,41 @@
-use crate::{models::soldier::ghoul::Ghoul, presenters::console::Presenter};
+use crate::{
+    controllers::random_controller::{RandomController, RandomGenerator},
+    models::soldier::ghoul::Ghoul,
+    presenters::console::Presenter,
+};
 
-use super::{game::GhoulishPower, states::State};
+use super::{game::GhoulishPower, states::GameState};
 use mockall::automock;
 
 pub struct GameLoop;
 
 impl GameLoop {
-    fn new_game(&self, presenter: &dyn Presenter) -> State {
+    fn new_game(&self, presenter: &dyn Presenter) -> GameState {
         presenter.print("New game");
-        State::GameLoop
+        GameState::GameLoop
     }
 
-    fn game_loop(&self, _game: &mut GhoulishPower) -> State {
-        State::GameOver
+    fn game_loop(&self, game: &mut GhoulishPower) -> GameState {
+        let ghouls = GameLoop::create_enemies();
+
+        game.enemies = ghouls;
+
+        while !game.enemies.is_empty() {
+            
+        }
+
+        GameState::GameOver
     }
 
     #[allow(dead_code)]
     fn create_enemies() -> Vec<Ghoul> {
-        todo!()
+        let mut ghouls: Vec<Ghoul> = vec![];
+
+        for _ in 1..RandomController::random_value_i32(RandomController::generate_seed(), 1..5) {
+            ghouls.push(Ghoul::new_random());
+        }
+
+        ghouls
     }
 
     #[allow(dead_code)]
@@ -25,25 +43,25 @@ impl GameLoop {
         todo!()
     }
 
-    fn game_over(&self, presenter: &dyn Presenter) -> State {
+    fn game_over(&self, presenter: &dyn Presenter) -> GameState {
         presenter.print("Game over");
-        State::NewGame
+        GameState::NewGame
     }
 }
 
 impl GameLooper for GameLoop {
-    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> State {
-        match game.state {
-            State::NewGame => self.new_game(presenter),
-            State::GameLoop => self.game_loop(game),
-            State::GameOver => self.game_over(presenter),
+    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> GameState {
+        match game.game_state {
+            GameState::NewGame => self.new_game(presenter),
+            GameState::GameLoop => self.game_loop(game),
+            GameState::GameOver => self.game_over(presenter),
         }
     }
 }
 
 #[automock]
 pub trait GameLooper {
-    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> State;
+    fn run(&self, game: &mut GhoulishPower, presenter: &dyn Presenter) -> GameState;
 }
 
 #[cfg(test)]
@@ -58,7 +76,7 @@ mod game_loop_should {
             weapon::GhoulWeapon,
         },
         presenters::console::MockPresenter,
-        state::{game::GhoulishPower, states::State},
+        state::{game::GhoulishPower, states::{GameState, State}},
     };
     use mockall::predicate::eq;
 
@@ -74,7 +92,7 @@ mod game_loop_should {
         let state = game_loop.new_game(&presenter);
 
         // Then
-        assert_eq!(State::GameLoop, state)
+        assert_eq!(GameState::GameLoop, state)
     }
 
     #[test]
@@ -97,9 +115,10 @@ mod game_loop_should {
         };
 
         let mut game = GhoulishPower {
-            state: State::NewGame,
+            game_state: GameState::NewGame,
             player: ghoul,
             enemies: vec![],
+            state: State::default(),
         };
 
         // let mut presenter = MockPresenter::new();
@@ -111,7 +130,7 @@ mod game_loop_should {
         let state = game_loop.game_loop(&mut game);
 
         // Then
-        assert_eq!(State::GameOver, state)
+        assert_eq!(GameState::GameOver, state)
     }
 
     #[test]
@@ -126,6 +145,6 @@ mod game_loop_should {
         let state = game_loop.game_over(&presenter);
 
         // Then
-        assert_eq!(State::NewGame, state)
+        assert_eq!(GameState::NewGame, state)
     }
 }
