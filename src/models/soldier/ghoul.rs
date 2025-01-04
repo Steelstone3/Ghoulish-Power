@@ -1,5 +1,3 @@
-use std::default;
-
 use super::{
     constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
     types::ghoul_types::GhoulType,
@@ -42,6 +40,7 @@ impl Ghoul {
         }
     }
 
+    #[allow(dead_code)]
     pub fn take_damage(&mut self, weapon: &dyn Weapon) {
         let damage = weapon.attack();
 
