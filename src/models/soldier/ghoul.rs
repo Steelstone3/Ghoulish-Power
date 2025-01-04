@@ -45,14 +45,15 @@ impl Ghoul {
     pub fn take_damage(&mut self, weapon: &dyn Weapon) {
         let damage = weapon.attack();
 
-        if self.armour.armour > damage {
-            self.armour.armour -= damage
+        if damage >= self.armour.armour + self.health.health {
+            self.armour.armour =0;
+            self.health.health = 0;
+            self.is_dead = true;
         }
-        //  else if self.health.health > damage {
-        //     self.health.health -= damage
-        // } else {
-        //     self.is_dead = true;
-        // }
+        else if damage < self.armour.armour {
+            
+        }
+      
     }
 }
 
@@ -137,10 +138,29 @@ mod ghoul_should {
     }
 
     #[rstest]
-    #[case(100, 100, 0, false)]
-    #[case(90, 100, 10, false)]
+    #[case(100, 100, 100, 100, 0, false)]
+    // #[case(100, 99, 100, 100, 1, false)]
+    // #[case(100, 95, 100, 100, 5, false)]
+    // #[case(100, 90, 100, 100, 10, false)]
+    // #[case(100, 85, 100, 100, 15, false)]
+    // #[case(100, 1, 100, 100, 99, false)]
+    // #[case(100, 0, 100, 100, 100, false)]
+    // #[case(100, 0, 100, 100, 101, false)]
+    // #[case(100, 0, 100, 100, 200, false)]
+    // #[case(10, 0, 100, 100, 11, false)]
+    // #[case(0, 0, 100, 99, 1, false)]
+    // #[case(0, 0, 100, 95, 5, false)]
+    // #[case(0, 0, 100, 90, 10, false)]
+    // #[case(0, 0, 100, 85, 15, false)]
+    // #[case(0, 0, 100, 1, 99, false)]
+    #[case(0, 0, 100, 0, 100, true)]
+    #[case(0, 0, 100, 0, 101, true)]
+    #[case(0, 0, 100, 0, 200, true)]
+    #[case(0, 0, 10, 0, 11, true)]
     fn take_damage(
+        #[case] armour: u32,
         #[case] expected_armour: u32,
+        #[case] health: u32,
         #[case] expected_health: u32,
         #[case] damage: u32,
         #[case] expected_is_dead: bool,
@@ -150,9 +170,9 @@ mod ghoul_should {
         let mut ghoul = Ghoul {
             is_dead: Default::default(),
             ghoul_type: Default::default(),
-            health: Default::default(),
+            health: GhoulHealth { health },
             armour: GhoulArmour {
-                armour: 100,
+                armour,
                 armour_type: Default::default(),
                 armour_element: Default::default(),
             },
