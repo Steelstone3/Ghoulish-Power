@@ -46,14 +46,12 @@ impl Ghoul {
         let damage = weapon.attack();
 
         if damage >= self.armour.armour + self.health.health {
-            self.armour.armour =0;
+            self.armour.armour = 0;
             self.health.health = 0;
             self.is_dead = true;
+        } else if damage < self.armour.armour {
+            self.armour.armour -= damage
         }
-        else if damage < self.armour.armour {
-            
-        }
-      
     }
 }
 
@@ -139,11 +137,11 @@ mod ghoul_should {
 
     #[rstest]
     #[case(100, 100, 100, 100, 0, false)]
-    // #[case(100, 99, 100, 100, 1, false)]
-    // #[case(100, 95, 100, 100, 5, false)]
-    // #[case(100, 90, 100, 100, 10, false)]
-    // #[case(100, 85, 100, 100, 15, false)]
-    // #[case(100, 1, 100, 100, 99, false)]
+    #[case(100, 99, 100, 100, 1, false)]
+    #[case(100, 95, 100, 100, 5, false)]
+    #[case(100, 90, 100, 100, 10, false)]
+    #[case(100, 85, 100, 100, 15, false)]
+    #[case(100, 1, 100, 100, 99, false)]
     // #[case(100, 0, 100, 100, 100, false)]
     // #[case(100, 0, 100, 100, 101, false)]
     // #[case(100, 0, 100, 100, 200, false)]
