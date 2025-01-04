@@ -20,9 +20,7 @@ impl GameLoop {
 
         game.enemies = ghouls;
 
-        while !game.enemies.is_empty() {
-            
-        }
+        // while !game.enemies.is_empty() {}
 
         GameState::GameOver
     }
@@ -115,6 +113,7 @@ mod game_loop_should {
                 weapon_element: Element::Cosmic,
                 damage: 5..10,
             },
+            is_dead: Default::default(),
         };
 
         let mut game = GhoulishPower {

@@ -14,7 +14,7 @@ pub struct GhoulWeapon {
 
 impl Weapon for GhoulWeapon {
     fn attack(&self) -> u32 {
-        todo!()
+        self.damage.start
     }
 }
 

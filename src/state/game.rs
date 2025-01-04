@@ -96,6 +96,7 @@ mod game_should {
             armour,
             mana,
             weapon,
+            is_dead: Default::default(),
         };
 
         let mut ghoul_presenter = MockGhoulPresenter::new();
@@ -155,6 +156,7 @@ mod game_should {
                     weapon_element: Element::Air,
                     damage: 5..10,
                 },
+                is_dead: Default::default(),
             },
             enemies: vec![],
             state: State::default(),
@@ -186,6 +188,7 @@ mod game_should {
                     weapon_element: Element::Air,
                     damage: 5..10,
                 },
+                is_dead: Default::default(),
             },
             enemies: vec![],
             state: State::default(),
