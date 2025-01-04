@@ -76,7 +76,10 @@ mod game_loop_should {
             weapon::GhoulWeapon,
         },
         presenters::console::MockPresenter,
-        state::{game::GhoulishPower, states::{GameState, State}},
+        state::{
+            game::GhoulishPower,
+            states::{GameState, State},
+        },
     };
     use mockall::predicate::eq;
 

@@ -12,6 +12,12 @@ pub struct GhoulWeapon {
     pub damage: Range<u32>,
 }
 
+impl Weapon for GhoulWeapon {
+    fn attack(&self) -> u32 {
+        todo!()
+    }
+}
+
 impl GhoulWeapon {
     pub fn new(ghoul_presenter: &dyn GhoulPresenter) -> Self {
         Self {
@@ -31,7 +37,9 @@ impl GhoulWeapon {
 }
 
 #[allow(dead_code)]
-pub trait Weapon {}
+pub trait Weapon {
+    fn attack(&self) -> u32;
+}
 
 #[cfg(test)]
 mod weapon_should {

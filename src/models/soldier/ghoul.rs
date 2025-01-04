@@ -5,7 +5,7 @@ use super::{
         mana::GhoulMana,
     },
     types::ghoul_types::GhoulType,
-    weapon::GhoulWeapon,
+    weapon::{GhoulWeapon, Weapon},
 };
 use crate::presenters::ghoul_presenter::GhoulPresenter;
 use rand::random;
@@ -39,6 +39,10 @@ impl Ghoul {
             mana: GhoulMana::default(),
             weapon: GhoulWeapon::new_random(),
         }
+    }
+
+    pub fn take_damage(&mut self, weapon: &dyn Weapon) {
+        todo!()
     }
 }
 
