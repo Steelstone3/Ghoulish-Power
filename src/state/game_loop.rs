@@ -113,7 +113,6 @@ mod game_loop_should {
                 weapon_element: Element::Cosmic,
                 damage: 5..10,
             },
-            is_dead: Default::default(),
         };
 
         let mut game = GhoulishPower {

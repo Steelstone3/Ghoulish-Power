@@ -65,11 +65,7 @@ mod ghoul_should {
     use super::Ghoul;
     use crate::{
         models::soldier::{
-            constitution::{
-                armour::GhoulArmour,
-                health::{GhoulHealth, Health},
-                mana::GhoulMana,
-            },
+            constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
             elements::Element,
             types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
             weapon::GhoulWeapon,
@@ -221,10 +217,27 @@ mod ghoul_should {
     #[test]
     fn is_not_dead() {
         // Given
+        let ghoul = Ghoul {
+            ghoul_type: Default::default(),
+            health: GhoulHealth { health: 1 },
+            armour: GhoulArmour {
+                armour: 0,
+                armour_type: ArmourType::default(),
+                armour_element: Element::default(),
+            },
+            mana: GhoulMana { mana: 100 },
+            weapon: GhoulWeapon {
+                weapon_type: WeaponType::default(),
+                weapon_element: Element::default(),
+                damage: 5..10,
+            },
+        };
 
         // When
+        let is_dead = ghoul.is_dead();
 
         // Then
+        assert!(!is_dead)
     }
 
     fn weapon_test_fixture(damage: u32) -> GhoulWeapon {
