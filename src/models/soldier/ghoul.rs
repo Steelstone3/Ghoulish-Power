@@ -9,7 +9,6 @@ use rand::random;
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 pub struct Ghoul {
-    pub is_dead: bool,
     pub ghoul_type: GhoulType,
     pub health: GhoulHealth,
     pub armour: GhoulArmour,
@@ -25,7 +24,6 @@ impl Ghoul {
             armour: GhoulArmour::new(ghoul_presenter),
             mana: GhoulMana::default(),
             weapon: GhoulWeapon::new(ghoul_presenter),
-            is_dead: Default::default(),
         }
     }
 
@@ -36,7 +34,6 @@ impl Ghoul {
             armour: GhoulArmour::new_random(),
             mana: GhoulMana::default(),
             weapon: GhoulWeapon::new_random(),
-            is_dead: Default::default(),
         }
     }
 
@@ -55,10 +52,11 @@ impl Ghoul {
                 self.health.health = 0;
             }
         }
+    }
 
-        if self.health.health == 0 {
-            self.is_dead = true;
-        }
+    #[allow(dead_code)]
+    pub fn is_dead(&self) -> bool {
+        self.health.health == 0
     }
 }
 
@@ -67,7 +65,11 @@ mod ghoul_should {
     use super::Ghoul;
     use crate::{
         models::soldier::{
-            constitution::{armour::GhoulArmour, health::GhoulHealth, mana::GhoulMana},
+            constitution::{
+                armour::GhoulArmour,
+                health::{GhoulHealth, Health},
+                mana::GhoulMana,
+            },
             elements::Element,
             types::{armour_types::ArmourType, ghoul_types::GhoulType, weapon_types::WeaponType},
             weapon::GhoulWeapon,
@@ -108,7 +110,6 @@ mod ghoul_should {
             armour,
             mana,
             weapon,
-            is_dead: Default::default(),
         };
 
         let mut ghoul_presenter = MockGhoulPresenter::new();
@@ -143,37 +144,35 @@ mod ghoul_should {
     }
 
     #[rstest]
-    #[case(100, 100, 100, 100, 0, false)]
-    #[case(100, 99, 100, 100, 1, false)]
-    #[case(100, 95, 100, 100, 5, false)]
-    #[case(100, 90, 100, 100, 10, false)]
-    #[case(100, 85, 100, 100, 15, false)]
-    #[case(100, 1, 100, 100, 99, false)]
-    #[case(100, 0, 100, 100, 100, false)]
-    #[case(10, 0, 100, 89, 11, false)]
-    #[case(0, 0, 100, 99, 1, false)]
-    #[case(0, 0, 100, 95, 5, false)]
-    #[case(0, 0, 100, 90, 10, false)]
-    #[case(0, 0, 100, 85, 15, false)]
-    #[case(0, 0, 100, 1, 99, false)]
-    #[case(100, 0, 100, 0, 101, true)]
-    #[case(100, 0, 100, 0, 200, true)]
-    #[case(0, 0, 100, 0, 100, true)]
-    #[case(0, 0, 100, 0, 101, true)]
-    #[case(0, 0, 100, 0, 200, true)]
-    #[case(0, 0, 10, 0, 11, true)]
+    #[case(100, 100, 100, 100, 0)]
+    #[case(100, 99, 100, 100, 1)]
+    #[case(100, 95, 100, 100, 5)]
+    #[case(100, 90, 100, 100, 10)]
+    #[case(100, 85, 100, 100, 15)]
+    #[case(100, 1, 100, 100, 99)]
+    #[case(100, 0, 100, 100, 100)]
+    #[case(10, 0, 100, 89, 11)]
+    #[case(0, 0, 100, 99, 1)]
+    #[case(0, 0, 100, 95, 5)]
+    #[case(0, 0, 100, 90, 10)]
+    #[case(0, 0, 100, 85, 15)]
+    #[case(0, 0, 100, 1, 99)]
+    #[case(100, 0, 100, 0, 101)]
+    #[case(100, 0, 100, 0, 200)]
+    #[case(0, 0, 100, 0, 100)]
+    #[case(0, 0, 100, 0, 101)]
+    #[case(0, 0, 100, 0, 200)]
+    #[case(0, 0, 10, 0, 11)]
     fn take_damage(
         #[case] armour: u32,
         #[case] expected_armour: u32,
         #[case] health: u32,
         #[case] expected_health: u32,
         #[case] damage: u32,
-        #[case] expected_is_dead: bool,
     ) {
         // Given
         let weapon = weapon_test_fixture(damage);
         let mut ghoul = Ghoul {
-            is_dead: Default::default(),
             ghoul_type: Default::default(),
             health: GhoulHealth { health },
             armour: GhoulArmour {
@@ -191,7 +190,41 @@ mod ghoul_should {
         // Then
         assert_eq!(expected_armour, ghoul.armour.armour);
         assert_eq!(expected_health, ghoul.health.health);
-        assert_eq!(expected_is_dead, ghoul.is_dead);
+    }
+
+    #[test]
+    fn is_dead() {
+        // Given
+        let ghoul = Ghoul {
+            ghoul_type: Default::default(),
+            health: GhoulHealth { health: 0 },
+            armour: GhoulArmour {
+                armour: 0,
+                armour_type: ArmourType::default(),
+                armour_element: Element::default(),
+            },
+            mana: GhoulMana { mana: 100 },
+            weapon: GhoulWeapon {
+                weapon_type: WeaponType::default(),
+                weapon_element: Element::default(),
+                damage: 5..10,
+            },
+        };
+
+        // When
+        let is_dead = ghoul.is_dead();
+
+        // Then
+        assert!(is_dead)
+    }
+
+    #[test]
+    fn is_not_dead() {
+        // Given
+
+        // When
+
+        // Then
     }
 
     fn weapon_test_fixture(damage: u32) -> GhoulWeapon {
